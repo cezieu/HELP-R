@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <link rel="stylesheet" type="text/css" href="theme.css"/> 
+<title>Help-R</title>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"/>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,700' rel='stylesheet' type='text/css'/>
+
+
+<script src="script.js"></script>
+</head>
+<body>
+<header class="container">
+       <div class="row">   
+       <h1 class="col-sm-4">Echipa Help-R</h1>
+       <nav class= "col-sm-8 text-right">
+         <p ><a href="site.html" style="text-decoration:none;"> Romana</a></p>
+         <p ><a href="new.html" style="text-decoration:none;">English</a></p>
+       </nav>
+       </div>
+   </header>
+  <section class="jumbotron">
+    <div class="container">
+      <div class="row text-center">
+        <h1>Echipa Help-R</h1>
+      </div>
+    </div>
+  </section>
+<div class="container-fluid"> 
+  <div class="row text-center">
+	<h2>Construim un robot care sa gaseasca persoane blocate intr-o salina. Acest robot este controlat de la distanta si colecteaza si transmite video si audio, colectand mostre de sol si date 
+	(pH-ul apei,diferenta de altitudine,prezenta gazelor toxice/ a oxigenului, prezenta radiatiilor, a vibratiilor)</h2>
+  </div>
+  <div class="row"
+<br>
+ <hr size="30"> 
+<br>
+  </div>
+ <div class="row-fluid">
+  <div class="col-md-2">
+		<img src="untitled.png" class="img-rounded" alt="untitledhlpr" width="180" height="180">
+	</div>
+   <div class="col-md-10">
+		<br>
+		<br>
+		<h2>               Echipa noastra este formata din patru elevi:<h2>
+   </div>
+ </div>
+  <div class="row-fluid">
+	<div class="col-md-2"
+	<p>Vlad Logyn<p>
+	</div>
+	<div class="col-md-2"
+	<p>ehh nu va stiu bine numele<p>
+	</div>
+	<div class="col-md-2"
+	<p>Sebastian Severin<p>
+	</div>
+	<div class="col-md-2"
+	<p>ehh nu va stiu bine numele<p>
+	</div>
+  </div>
+</div>
+  <br><br><br>
+<script src="../build/three.js"></script>
+<script src="js/loaders/OBJLoader.js"></script>
+
+		<script>
+			var container;
+			var camera, scene, renderer;
+			var mouseX = 0, mouseY = 0;
+			var windowHalfX = window.innerWidth / 2;
+			var windowHalfY = window.innerHeight / 2;
+			init();
+			animate();
+			function init() {
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
+				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
+				camera.position.z = 250;
+				// scene
+				scene = new THREE.Scene();
+				var ambient = new THREE.AmbientLight( 0x101030 );
+				scene.add( ambient );
+				var directionalLight = new THREE.DirectionalLight( 0xffeedd );
+				directionalLight.position.set( 0, 0, 1 );
+				scene.add( directionalLight );
+				// texture
+				var manager = new THREE.LoadingManager();
+				manager.onProgress = function ( item, loaded, total ) {
+					console.log( item, loaded, total );
+				};
+				var texture = new THREE.Texture();
+				var onProgress = function ( xhr ) {
+					if ( xhr.lengthComputable ) {
+						var percentComplete = xhr.loaded / xhr.total * 100;
+						console.log( Math.round(percentComplete, 2) + '% downloaded' );
+					}
+				};
+				var onError = function ( xhr ) {
+				};
+				var loader = new THREE.ImageLoader( manager );
+				loader.load( 'textures/UV_Grid_Sm.jpg', function ( image ) {
+					texture.image = image;
+					texture.needsUpdate = true;
+				} );
+				// model
+				var loader = new THREE.OBJLoader( manager );
+				loader.load( 'obj/male02/male02.obj', function ( object ) {
+					object.traverse( function ( child ) {
+						if ( child instanceof THREE.Mesh ) {
+							child.material.map = texture;
+						}
+					} );
+					object.position.y = - 95;
+					scene.add( object );
+				}, onProgress, onError );
+				//
+				renderer = new THREE.WebGLRenderer();
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				container.appendChild( renderer.domElement );
+				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+				//
+				window.addEventListener( 'resize', onWindowResize, false );
+			}
+			function onWindowResize() {
+				windowHalfX = window.innerWidth / 2;
+				windowHalfY = window.innerHeight / 2;
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+			}
+			function onDocumentMouseMove( event ) {
+				mouseX = ( event.clientX - windowHalfX ) / 2;
+				mouseY = ( event.clientY - windowHalfY ) / 2;
+			}
+			//
+			function animate() {
+				requestAnimationFrame( animate );
+				render();
+			}
+			function render() {
+				camera.position.x += ( mouseX - camera.position.x ) * .05;
+				camera.position.y += ( - mouseY - camera.position.y ) * .05;
+				camera.lookAt( scene.position );
+				renderer.render( scene, camera );
+			}
+		</script>
+  
+  
+  
+  
+  
+  
+  
+  
+  <footer class="container">
+    <div class="row">
+	 <div class="col-md-9"> </div>
+	 
+      <p class="col-md-3">Site creat de Popescu Cezar Gabriel </p>
+	 
+    </div>
+    
+  </footer>
+
+</body>
+</html>
