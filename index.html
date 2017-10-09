@@ -89,7 +89,7 @@
   <br>
 
 <div class="row text-center">
-	<h2>Un model 3d ce reprezinta robotul nostru pana acum:</h2><br><h4>Apasati "L" pentru shading/luminare</h4>
+	<h2>Un model 3d ce reprezinta robotul nostru pana acum:</h2><br>
 </div>
 <script src="../build/three.js"></script>
 <script src="js/loaders/OBJLoader.js"></script>
@@ -124,7 +124,7 @@
             /* Scene */
 
             scene = new THREE.Scene();
-            lighting = false;
+            lighting = true;
 
             ambient = new THREE.AmbientLight(0xffffff, 1.0);
             scene.add(ambient);
@@ -137,7 +137,11 @@
 
             backLight = new THREE.DirectionalLight(0xffffff, 1.0);
             backLight.position.set(100, 0, -100).normalize();
-
+			
+			        ambient.intensity = 0.25;
+                    scene.add(keyLight);
+                    scene.add(fillLight);
+                    scene.add(backLight);
             /* Model */
 
             var mtlLoader = new THREE.MTLLoader();
@@ -209,14 +213,14 @@
                     scene.add(fillLight);
                     scene.add(backLight);
 
-                } else {
+                } /*else {
 
-                    ambient.intensity = 1.0;
+                    ambient.intensity = 0.7;
                     scene.remove(keyLight);
                     scene.remove(fillLight);
                     scene.remove(backLight);
 
-                }
+                }*/
 
             }
 
