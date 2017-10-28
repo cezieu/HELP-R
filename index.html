@@ -110,7 +110,7 @@
 <script src="../build/three.js"></script>
 <script src="js/loaders/OBJLoader.js"></script>
 
-//		<script>
+		<script>
 //
 //        if (!Detector.webgl) {
 //            Detector.addGetWebGLMessage();
@@ -318,7 +318,8 @@ var createScene = function () {
 	};
 	
     //Adding a light
-    var light = new BABYLON.PointLight("Omni", new BABYLON.Vector3(20, 20, 100), scene);
+   // var light = new BABYLON.PointLight("Omni", new BABYLON.Vector3(20, 20, 100), scene);
+	var light = new BABYLON.DirectionalLight("DirectionalLight", new BABYLON.Vector3(0, -1, 0), scene);
 
     //Adding an Arc Rotate Camera
     var camera = new BABYLON.ArcRotateCamera("Camera", 0, 0.8, 100, BABYLON.Vector3.Zero(), scene);
