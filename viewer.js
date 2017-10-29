@@ -62,7 +62,7 @@ var createScene = function () {
     //camera.attachControl(canvas, false);
         let loader = new BABYLON.AssetsManager(scene);
         loader.useDefaultLoadingScreen = true;  // Set to false to remove the default loading
-        let mesh_loaded_task = loader.addMeshTask("loadin","","./", "rov2.obj");
+        let mesh_loaded_task = loader.addMeshTask("loadin","","./", "r3.obj");
 
         mesh_loaded_task.onSuccess = function (task) {
              task.loadedMeshes.forEach(function(m) {
