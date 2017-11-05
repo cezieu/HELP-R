@@ -1,8 +1,10 @@
 
-body {
+html, body {
   font-family: 'Roboto', sans-serif;
   font-weight: 300;
    background-image: ;
+   background-color: #ffd48c;
+   color: #59497c
 }
 a {
 text-decoration:none;
@@ -23,7 +25,7 @@ header p {
 .jumbotron {
   display: flex;
   align-items: center;
-  background-image: h.png;
+  background-color: #fcb320;
   font-family: 'Roboto', sans-serif;
   font-weight: 300;
   background-size: cover;
@@ -55,7 +57,7 @@ header h1 {
   font-size: 60px;
   font-weight: 700;
   margin: 0;
-  color: #fff;
+  background-color: #fcb320;
 }
 
 .jumbotron h3 {
@@ -170,4 +172,14 @@ footer li img {
 #info {
 font-size: 64 px;
 color:#ffffff;
+}
+path {
+  pointer-events: none;
+  fill: transparent;
+}
+
+text {
+  fill: #0455f7;
+  font-size: 64px;
+  font-weight: bold;
 }
