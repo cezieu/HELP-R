@@ -173,13 +173,3 @@ footer li img {
 font-size: 64 px;
 color:#ffffff;
 }
-path {
-  pointer-events: none;
-  fill: transparent;
-}
-
-text {
-  fill: #0455f7;
-  font-size: 64px;
-  font-weight: bold;
-}
