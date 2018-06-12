@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+canvas {
+    border:1px solid #d3d3d3;
+    background-color: #f1f1f1;
+}
+</style>
+</head>
+<body onload="startGame()">
+<script>
+
+var myGamePiece;
+var myObstacles = [];
+var myObstacles2 = [];
+var myScore;
+var myBackground;
+var myHealth;
+var lastHit=0;
+var hurt;
+var ded;
+
+function startGame() {
+ myBackground = new component(656, 270, "liceu.jpg", 40, 70, "image");
+    myGamePiece = new component(30, 30, "steag2.bmp",0, 135,"image");
+    myObstacle = new component(10, 200, "red", 300, 120); 
+  myScore = new component("30px", "Consolas", "red", 280, 40, "text");
+myHealth = new component("30px", "Consolas", "red", 100, 40, "text");
+ded = new component("30px", "Consolas", "black", 150, 200, "text");
+hurt=new component("30px", "Consolas", "purple", 180, 40, "text");
+
+
+
+    myGameArea.start();
+}
+
+var myGameArea = {
+    canvas : document.createElement("canvas"),
+    start : function() {
+        this.canvas.width = 1200;
+        this.canvas.height = 360;
+	
+        this.context = this.canvas.getContext("2d");
+        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+	this.frameNo = 0; 
+	this.score = 0;      
+        this.interval = setInterval(updateGameArea, 20);
+       window.addEventListener('touchmove', function (e) {
+            myGameArea.x = e.touches[0].screenX;
+            myGameArea.y = e.touches[0].screenY;
+        })
+  window.addEventListener('keydown', function (e) {
+            myGameArea.keys = (myGameArea.keys || []);
+            myGameArea.keys[e.keyCode] = true;
+        })
+        window.addEventListener('keyup', function (e) {
+            myGameArea.keys[e.keyCode] = false;
+        })
+    },
+    clear : function() {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    },
+    stop : function() {
+
+
+        clearInterval(this.interval);
+    }
+}
+function everyinterval(n) {
+    if ((Math.floor(myGameArea.frameNo*2) / n) % 1 === 0) {return true;}
+    return false;
+}
+function component(width, height, color, x, y, type) {
+this.type = type;
+if (type == "image") {
+    this.image = new Image();
+    this.image.src = color;
+  }
+	this.health=3;
+    this.width = width;
+    this.height = height;
+    this.speedX = 0;
+    this.speedY = 0;
+    this.x = x;
+    this.y = y;    
+    this.update = function() {
+        ctx = myGameArea.context;
+ if (type == "image" || type == "background") {
+      ctx.drawImage(this.image,
+        this.x,
+        this.y,
+        this.width, this.height);
+	if (type == "background") {
+                ctx.drawImage(this.image,
+                this.x + this.width, this.y, this.width, this.height);
+            }
+    } else if (this.type == "text") {
+      ctx.font = this.width + " " + this.height;
+      ctx.fillStyle = color;
+      ctx.fillText(this.text, this.x, this.y);
+    } else {
+        ctx.fillStyle = color;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    }}
+    this.newPos = function() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+this.hitBottom();  
+ if (this.type == "background") {
+            if (this.x == -(this.width)) {
+                this.x = 0;
+            }
+        }      
+    }    
+this.hitBottom = function() {
+ var maxheight = 0;
+var maxfront = myGameArea.canvas.width - this.width-10;
+        var rockbottom = myGameArea.canvas.height - this.height;
+	 if (this.x > maxfront) {
+            this.x = maxfront; myGamePiece.speedX=-2;
+        }
+        if (this.y > rockbottom) {
+            this.y = rockbottom; myGamePiece.speedY=0;
+        }
+	if (this.y < maxheight) {
+            this.y = maxheight; myGamePiece.speedY=0;
+        }
+	if (this.x <= maxheight  && type != "background") {
+            this.x = maxheight; 
+        }
+    }
+	 this.crashWith = function(otherobj) {
+        var myleft = this.x;
+        var myright = this.x + (this.width);
+        var mytop = this.y;
+        var mybottom = this.y + (this.height);
+        var otherleft = otherobj.x;
+        var otherright = otherobj.x + (otherobj.width);
+        var othertop = otherobj.y;
+        var otherbottom = otherobj.y + (otherobj.height);
+        var crash = true;
+        if ((mybottom < othertop) ||
+               (mytop > otherbottom) ||
+               (myright < otherleft) ||
+               (myleft > otherright)) {
+           crash = false;
+        }
+        return crash;
+    }
+}
+function updateGameArea() {
+     var x, height, gap, minHeight, maxHeight, minGap, maxGap;
+
+
+    for (i = 0; i < myObstacles.length; i += 1) {
+        if (myGamePiece.crashWith(myObstacles[i]) && myGameArea.frameNo-lastHit>=50) {
+            myGamePiece.health=myGamePiece.health-1;
+		lastHit=myGameArea.frameNo;
+	
+            
+        }
+    }
+	    for (i = 0; i < myObstacles2.length; i += 1 ) {
+        if (myGamePiece.crashWith(myObstacles2[i]) && myGameArea.frameNo-lastHit>=50) {
+            myGamePiece.health=myGamePiece.health-1;
+		lastHit=myGameArea.frameNo;
+		
+	
+            
+        }
+    }
+	if(myGamePiece.health<=0){
+myHealth.text="HP: 0";
+myHealth.update();
+	ded.text="AI MURIT PROSTULE";
+	ded.update();
+	myGameArea.stop();
+
+            //return;
+}
+    myGameArea.clear();
+ myBackground.speedX = -0.1; 
+    myGameArea.frameNo = myGameArea.frameNo+1;
+	myGameArea.score=myGameArea.score+1;
+	myGameArea.score=myGameArea.score+myGamePiece.speedX;
+	myBackground.newPos();
+    myBackground.update();
+
+
+	if (myGameArea.frameNo == 1 || everyinterval(60)) {
+
+	
+	x = myGameArea.canvas.width;
+	y= Math.floor(Math.random()*(myGameArea.canvas.height));
+var rand=Math.floor(Math.random()*10);
+if (rand==0) myObstacles2.push(new component(15, 15, "pink", x, y));	 
+else if (rand==1) myObstacles2.push(new component(20, 4, "pink", x, y)); 
+else if (rand==2) myObstacles2.push(new component(12, 5, "pink", x, y));
+else if (rand==3) myObstacles2.push(new component(5, 5, "pink", x, y)); 
+else if (rand==4) myObstacles2.push(new component(8, 8, "pink", x, y)); 
+else if (rand==5) myObstacles2.push(new component(6, 6, "pink", x, y)); 
+else if (rand==6) myObstacles2.push(new component(9, 9, "pink", x, y)); 
+else if (rand==7) myObstacles2.push(new component(7, 7, "pink", x, y)); 
+else if (rand==8) myObstacles2.push(new component(10, 5, "pink", x, y));  
+else myObstacles2.push(new component(20, 5, "pink", x, y));	
+	
+	}
+
+	
+	
+
+
+
+       if (Math.floor(myGameArea.frameNo) == 1 || everyinterval(250)) {
+        x = myGameArea.canvas.width;
+        minHeight = 20;
+        maxHeight = 200;
+	minWidth=2
+	maxWidth=25
+	width = Math.floor(Math.random()*(maxWidth-minWidth+1)+minWidth);
+        height = Math.floor(Math.random()*(maxHeight-minHeight+1)+minHeight);
+        minGap = 80;
+        maxGap = 210;
+        gap = Math.floor(Math.random()*(maxGap-minGap+1)+minGap);
+        myObstacles.push(new component(width, height, "blue", x, 0));
+        myObstacles.push(new component(width, x - height - gap, "red", x, height + gap));
+    }
+    for (i = 0; i < myObstacles.length; i += 1) {
+        myObstacles[i].x += -1;
+        myObstacles[i].update();
+    }
+    for (i = 0; i < myObstacles2.length; i += 1) {
+        myObstacles2[i].x += -2;
+        myObstacles2[i].update();
+    }
+
+if (myGameArea.touchX && myGameArea.touchY) {
+        myGamePiece.x = myGameArea.x;
+        myGamePiece.y = myGameArea.y;
+    }
+  if (myGameArea.keys && (myGameArea.keys[37] || myGameArea.keys[65]) && myGamePiece.speedX>=0.01) {myGamePiece.speedX -= 0.1; }
+    if (myGameArea.keys && (myGameArea.keys[39] || myGameArea.keys[68])) {myGamePiece.speedX += 0.1; }
+    if (myGameArea.keys && (myGameArea.keys[38] || myGameArea.keys[87])) {myGamePiece.speedY -= 0.1; }
+    if (myGameArea.keys && (myGameArea.keys[40] || myGameArea.keys[83])) {myGamePiece.speedY += 0.1; }
+	
+	myHealth.text="HP: "+myGamePiece.health;
+	myScore.text="SCOR: " + Math.floor(myGameArea.score);
+	if( myGameArea.frameNo-lastHit<=50 && myGameArea.frameNo>=50) hurt.text="! ! !";  else hurt.text="";
+    myScore.update();
+	myHealth.update();
+	hurt.update();
+    myGamePiece.newPos();
+    myGamePiece.update();
+
+}
+
+
+</script>
+
+
+
+</div>
+
+
+</body>
+</html>
