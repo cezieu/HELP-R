@@ -24,7 +24,7 @@ var ded;
 
 function startGame() {
  myBackground = new component(656, 270, "liceu.jpg", 40, 70, "image");
-    myGamePiece = new component(30, 30, "steag2.bmp",0, 135,"image");
+    myGamePiece = new component(30, 30, "mouse2.png",0, 135,"image");
     myObstacle = new component(10, 200, "red", 300, 120); 
   myScore = new component("30px", "Consolas", "red", 280, 40, "text");
 myHealth = new component("30px", "Consolas", "red", 100, 40, "text");
@@ -195,16 +195,39 @@ myHealth.update();
 	x = myGameArea.canvas.width;
 	y= Math.floor(Math.random()*(myGameArea.canvas.height));
 var rand=Math.floor(Math.random()*10);
-if (rand==0) myObstacles2.push(new component(15, 15, "#f538ff", x, y));	 
-else if (rand==1) myObstacles2.push(new component(20, 4, "#f538ff", x, y)); 
-else if (rand==2) myObstacles2.push(new component(12, 5, "#f538ff", x, y));
-else if (rand==3) myObstacles2.push(new component(5, 5, "#f538ff", x, y)); 
-else if (rand==4) myObstacles2.push(new component(8, 8, "#f538ff", x, y)); 
-else if (rand==5) myObstacles2.push(new component(6, 6, "#f538ff", x, y)); 
-else if (rand==6) myObstacles2.push(new component(9, 9, "#f538ff", x, y)); 
-else if (rand==7) myObstacles2.push(new component(7, 7, "#f538ff", x, y)); 
-else if (rand==8) myObstacles2.push(new component(10, 5, "#f538ff", x, y));  
-else myObstacles2.push(new component(20, 5, "#f538ff", x, y));	
+
+switch(rand) {
+    case 0:
+        myObstacles2.push(new component(15, 15, "#f538ff", x, y));	
+        break;
+    case 1:
+        myObstacles2.push(new component(20, 4, "#f538ff", x, y)); 
+        break;
+    case 2:
+        myObstacles2.push(new component(12, 5, "#f538ff", x, y));
+        break;
+    case 3:
+		myObstacles2.push(new component(5, 5, "#f538ff", x, y)); 
+        break;
+    case 4:
+        myObstacles2.push(new component(8, 8, "#f538ff", x, y)); 
+        break;
+    case 5:
+        myObstacles2.push(new component(6, 6, "#f538ff", x, y));
+        break;
+    case 6:
+        myObstacles2.push(new component(9, 9, "#f538ff", x, y)); 
+        break;
+    case 7:
+        myObstacles2.push(new component(7, 7, "#f538ff", x, y)); 
+        break;
+    case 8:
+        myObstacles2.push(new component(10, 5, "#f538ff", x, y)); 
+        break;
+    default:
+       myObstacles2.push(new component(20, 5, "#f538ff", x, y));	
+}
+
 	
 	}
 
@@ -247,7 +270,7 @@ if (myGameArea.touchX && myGameArea.touchY) {
 	
 	myHealth.text="HP: "+myGamePiece.health;
 	myScore.text="SCOR: " + Math.floor(myGameArea.score);
-	if( myGameArea.frameNo-lastHit<=50 && myGameArea.frameNo>=50) hurt.text="! ! !";  else hurt.text="";
+	if( myGameArea.frameNo-lastHit<=50 && myGameArea.frameNo>=54) hurt.text="! ! !";  else hurt.text="";
     myScore.update();
 	myHealth.update();
 	hurt.update();
